@@ -31,12 +31,15 @@ public class SenderSocketTask extends AsyncTask <List<TextMessage>, Integer, Voi
             inStream = new ObjectInputStream(socket.getInputStream());
             long lastTimeStamp = inStream.readLong();
             for (TextMessage msg : params[0]) {
-                if (msg.messageAlreadySent(lastTimeStamp)) {
+                if (!msg.messageAlreadySent(lastTimeStamp)) {
                     outStream.writeBoolean(true);
+                    outStream.flush();
                     outStream.writeObject(msg);
+                    outStream.flush();
                 }
             }
             outStream.writeBoolean(false);
+            outStream.flush();
             inStream.close();
             outStream.close();
             socket.close();

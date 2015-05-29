@@ -29,11 +29,10 @@ public class SocketReceivingTask extends AsyncTask<InetSocketAddress, Void, Void
             Socket socket = new Socket();
             socket.bind(null);
             socket.connect(params[0], 1000);
-            ObjectInputStream inStream;
-            ObjectOutputStream outStream;
-            inStream = new ObjectInputStream(socket.getInputStream());
-            outStream = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream inStream = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream outStream = new ObjectOutputStream(socket.getOutputStream());
             outStream.writeLong(mActivity.getLastTimestamp());
+            outStream.flush();
             while(inStream.readBoolean()){
                 TextMessage msg = (TextMessage) inStream.readObject();
                 mActivity.addMessage(msg, true);
